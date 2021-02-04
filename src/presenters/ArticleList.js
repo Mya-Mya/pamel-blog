@@ -1,5 +1,6 @@
 import { appAction, SceneName } from "../modules/app";
 import { articlesGetter } from "../modules/articles";
+import { fetchArticles } from "../utils/api";
 import parseDate from "../utils/parseDate";
 
 export const ArticleListSelector = {
@@ -23,5 +24,8 @@ export const ArticleListOperator = {
     onArticlePushed: (articleId) => dispatch => {
         dispatch(appAction.setDetailingArticleId(articleId));
         dispatch(appAction.setSceneName(SceneName.ARTICLE_DETAIL))
+    },
+    onRefreshPushed: () => dispatch => {
+        dispatch(fetchArticles());
     }
 }

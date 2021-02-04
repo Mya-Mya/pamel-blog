@@ -25,6 +25,7 @@ export const articlesGetter = {
 
 export const articlesAction = {
     addArticle: createAction('articles/addArticles', (articleId, author, updatedAt, title, content) => ({ payload: { articleId, author, updatedAt, title, content } })),
+    clearArticle: createAction('articles/clearArticle'),
     fetchPending: createAction('articles/fetchPending'),
     fetchLoading: createAction('articles/fetchLoading'),
     fetchError: createAction('articles/fetchError')
@@ -36,6 +37,7 @@ export const articlesReducer = createReducer(initialState, builder => {
         state.articleIds.push(articleId);
         state.entities[articleId] = { articleId, author, content, title, updatedAt }
     })
+        .addCase(articlesAction.clearArticle, (state, action) => { state.articleIds = initialState.articleIds; state.entities = initialState.entities; })
         .addCase(articlesAction.fetchPending, (state, action) => { state.fetchStatus = FetchStatus.PENDING })
         .addCase(articlesAction.fetchLoading, (state, action) => { state.fetchStatus = FetchStatus.LOADING })
         .addCase(articlesAction.fetchError, (state, action) => { state.fetchStatus = FetchStatus.ERROR })

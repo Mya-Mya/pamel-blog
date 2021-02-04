@@ -1,4 +1,4 @@
-import { Box, Card, makeStyles, Paper, Typography, ListItem, ListItemText } from "@material-ui/core"
+import { Box, Card, makeStyles, Paper, Typography, ListItem, ListItemText, Button } from "@material-ui/core"
 import { ArticleListOperator, ArticleListSelector } from "../presenters/ArticleList";
 import { useSelector, useDispatch } from "react-redux";
 import React from "react";
@@ -31,6 +31,7 @@ export default () => {
     const dispatch = useDispatch();
     const classes = useStyle();
     return <Box>
+        <Button variant="outlined" onClick={() => dispatch(ArticleListOperator.onRefreshPushed())}>更新</Button>
         {articles.map(article => {
             const { articleId, author, title, year, month, date } = article;
             const handleClick = () => dispatch(ArticleListOperator.onArticlePushed(articleId));
