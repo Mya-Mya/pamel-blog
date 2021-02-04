@@ -1,29 +1,40 @@
-import { Box, makeStyles, Paper, Typography } from "@material-ui/core"
-import { ArticleListSelector } from "../presenters/ArticleList";
-import { useSelector } from "react-redux";
+import { Box, Card, makeStyles, Paper, Typography, ListItem, ListItemText } from "@material-ui/core"
+import { ArticleListOperator, ArticleListSelector } from "../presenters/ArticleList";
+import { useSelector, useDispatch } from "react-redux";
+import React from "react";
 const useStyle = makeStyles(theme => ({
     article: {
         margin: theme.spacing(2),
     },
     element: {
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
+        maxWidth: "100%"
     }
 }));
 
+const ArticlePreview = (articleId, author, title, year, month, date, handleClick) => (
+    <ListItem key={articleId} button onClick={() => handleClick()}>
+        <ListItemText
+            primary={title}
+            secondary={
+                <React.Fragment>
+                    <Typography variant="body2">{author}</Typography>
+                    <Typography>{year}/{month}/{date}</Typography>
+                </React.Fragment>
+            }
+        />
+    </ListItem>
+)
+
 export default () => {
     const articles = useSelector(ArticleListSelector.getArticles);
-
+    const dispatch = useDispatch();
     const classes = useStyle();
     return <Box>
         {articles.map(article => {
-            const { articleId, author, updateAt, title, content } = article;
-            return (
-                <Paper className={classes.article} key={articleId}>
-                    <Typography variant="h5" className={classes.element}>{title}</Typography>
-                    <Typography color="primary" className={classes.element}>{author}</Typography>
-                    <Typography className={classes.element}>{content}</Typography>
-                </Paper>
-            )
+            const { articleId, author, title, year, month, date } = article;
+            const handleClick = () => dispatch(ArticleListOperator.onArticlePushed(articleId));
+            return ArticlePreview(articleId, author, title, year, month, date, handleClick);
         })}
     </Box>
 }
